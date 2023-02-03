@@ -106,5 +106,29 @@ def delete_employee():
         return jsonify(f'employee id = {id} is delete')
 
 
+'''OPERATOR'''
+
+
+@app.route('/admin_panel/api/v1.0/all_operators', methods=['GET'])
+def all_operators():
+    if request.method == 'GET':
+        json_operators = []
+        operators = call_stored_procedure('all_operators', commit=False, fetchall=True)
+
+        for op in operators:
+            json_operators.append({
+                                    'id': op[0],
+                                    'surname': op[1],
+                                    'name': op[2],
+                                    'patronymic': op[3],
+                                    'login': op[4],
+                                    'password_hash': op[5],
+                                    'phone': op[6]
+                                }
+            )
+
+        return jsonify(json_operators)
+
+
 def index():
     return 'Пошел нахуй'

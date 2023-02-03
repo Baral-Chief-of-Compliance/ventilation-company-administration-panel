@@ -163,15 +163,22 @@ begin
 	insert into employee(employee.surname, employee.name, employee.patronymic, employee.position, employee.phone , employee.br_id) values (surname, name, patronymic, position, phone, br_id);
 end//
 
+
+create procedure inf_about_employee(
+										id int
+)
+begin
+	select employee.surname, employee.name, employee.patronymic, employee.position, employee.phone , employee.br_id from employee where employee.id = id;
+end//
+
+
+create procedure delete_employee(
+									id int
+)
+begin
+	delete from employee where employee.id = id;
+end//
+
 DELIMITER ;
 
-create table employee(
-	id int primary key unique auto_increment not null,
-	surname varchar(20) not null,
-    name varchar(20) not null,
-    patronymic varchar(20) null,
-    position varchar(25) not null,
-	phone varchar(12) not null unique,
-    br_id int not null unique,
-    foreign key (br_id) references brigade(id) on delete cascade on update cascade
-);
+

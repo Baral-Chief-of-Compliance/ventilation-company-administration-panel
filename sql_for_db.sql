@@ -24,7 +24,7 @@ create table address(
     latitude varchar(20) not null
 );
 
-
+select * from brigade;
 create table brigade(
 	id int primary key unique auto_increment not null,
     name varchar(20) not null
@@ -111,4 +111,67 @@ create table materials_in_order(
     primary key (m_id, app_id),
     foreign key (m_id) references materials(id) on delete cascade on update cascade,
     foreign key (app_id) references application(id) on delete cascade on update cascade
+);
+
+
+DELIMITER //
+drop procedure all_brigades;
+create procedure add_brigade(
+		name varchar(20)
+)
+begin
+	insert into brigade(brigade.name) values (name);
+end//
+
+
+create procedure all_brigades()
+begin
+	select * from brigade;
+end//
+
+
+create procedure inf_about_brigade(
+									id int
+)
+begin
+	select brigade.name from brigade where brigade.id = id;
+end//
+
+
+create procedure delete_brigade(
+									id int
+)
+begin
+	delete from brigade where brigade.id = id;
+end//
+
+create procedure all_employess()
+begin
+	select * from employee;
+end//
+
+drop procedure add_employee;
+create procedure add_employee(
+								surname varchar(20),
+								name varchar(20),
+								patronymic varchar(20),
+								position varchar(25),
+								phone varchar(12),
+								br_id int
+)
+begin
+	insert into employee(employee.surname, employee.name, employee.patronymic, employee.position, employee.phone , employee.br_id) values (surname, name, patronymic, position, phone, br_id);
+end//
+
+DELIMITER ;
+
+create table employee(
+	id int primary key unique auto_increment not null,
+	surname varchar(20) not null,
+    name varchar(20) not null,
+    patronymic varchar(20) null,
+    position varchar(25) not null,
+	phone varchar(12) not null unique,
+    br_id int not null unique,
+    foreign key (br_id) references brigade(id) on delete cascade on update cascade
 );

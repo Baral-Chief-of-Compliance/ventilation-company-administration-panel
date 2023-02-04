@@ -5,7 +5,7 @@ from app.stored_procedure import call_stored_procedure
 '''BRIGADES'''
 
 
-@app.route('/admin_panel/api/v1.0/all_brigades', methods=['GET'])
+@app.route('/admin_panel/api/v1.0/brigades', methods=['GET'])
 def all_brigades():
     if request.method == 'GET':
         json_brigades = []
@@ -20,31 +20,26 @@ def all_brigades():
 @app.route('/admin_panel/api/v1.0/create_brigades', methods=['POST'])
 def create_brigades():
     if request.method == 'POST':
-        name = request.args['name']
+        name = request.json['name']
         call_stored_procedure('add_brigade', [name], commit=True, fetchall=False)
         return jsonify(f'brigade {name} is add')
 
 
-@app.route('/admin_panel/api/v1.0/inf_about_brigade', methods=['GET'])
-def inf_about_brigade():
+@app.route('/admin_panel/api/v1.0/brigades/<int:id>', methods=['GET', 'DELETE'])
+def inf_about_brigade(id):
     if request.method == 'GET':
-        id = request.args['id']
         inf = call_stored_procedure('inf_about_brigade', [id], commit=False, fetchall=False)
         return jsonify({'name': inf[0]})
 
-
-@app.route('/admin_panel/api/v1.0/delete_brigade', methods=['POST'])
-def delete_brigade():
-    if request.method == 'POST':
-        id = request.args['id']
+    elif request.method == 'DELETE':
         call_stored_procedure('delete_brigade', [id], commit=True, fetchall=False)
         return jsonify(f'brigade id = {id} is delete')
 
 
-'''EMPLOYESS'''
+'''EMPLOYEES'''
 
 
-@app.route('/admin_panel/api/v1.0/all_employess', methods=['GET'])
+@app.route('/admin_panel/api/v1.0/employees', methods=['GET'])
 def all_employess():
     if request.method == 'GET':
         json_employess= []
@@ -69,22 +64,21 @@ def all_employess():
 @app.route('/admin_panel/api/v1.0/add_employee', methods=['POST'])
 def add_employee():
     if request.method == 'POST':
-        surname = request.args['surname']
-        name = request.args['name']
-        patronymic = request.args['patronymic']
-        position = request.args['position']
-        phone = request.args['phone']
-        br_id = request.args['br_id']
+        surname = request.json['surname']
+        name = request.json['name']
+        patronymic = request.json['patronymic']
+        position = request.json['position']
+        phone = request.json['phone']
+        br_id = request.json['br_id']
 
         call_stored_procedure('add_employee', [surname, name, patronymic, position, phone, br_id], commit=True, fetchall=False)
 
         return jsonify(f'employee {surname} {name} {patronymic} is add')
 
 
-@app.route('/admin_panel/api/v1.0/inf_about_employee', methods=['GET'])
-def inf_about_employee():
+@app.route('/admin_panel/api/v1.0/employees/<int:id>', methods=['GET', 'DELETE'])
+def inf_about_employee(id):
     if request.method == 'GET':
-        id = request.args['id']
         inf = call_stored_procedure('inf_about_employee', [id], commit=False, fetchall=False)
         return jsonify(
                         {
@@ -97,16 +91,12 @@ def inf_about_employee():
                         }
         )
 
-
-@app.route('/admin_panel/api/v1.0/delete_employee', methods=['POST'])
-def delete_employee():
-    if request.method == 'POST':
-        id = request.args['id']
+    elif request.method == 'DELETE':
         call_stored_procedure('delete_employee', [id], commit=True, fetchall=False)
         return jsonify(f'employee id = {id} is delete')
 
 
-'''OPERATOR'''
+'''OPERATORS'''
 
 
 @app.route('/admin_panel/api/v1.0/all_operators', methods=['GET'])

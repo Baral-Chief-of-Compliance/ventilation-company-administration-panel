@@ -1,5 +1,6 @@
 from app import app, jsonify, request
 from app.stored_procedure import call_stored_procedure
+from app.hash import hash_password
 
 
 '''BRIGADES'''
@@ -40,13 +41,13 @@ def inf_about_brigade(id):
 
 
 @app.route('/admin_panel/api/v1.0/employees', methods=['GET'])
-def all_employess():
+def all_employees():
     if request.method == 'GET':
-        json_employess= []
-        employess = call_stored_procedure('all_employess', commit=False, fetchall=True)
+        json_employees = []
+        employees = call_stored_procedure('all_employess', commit=False, fetchall=True)
 
-        for emp in employess:
-            json_employess.append(
+        for emp in employees:
+            json_employees.append(
                 {
                     'id': emp[0],
                     'surname': emp[1],
@@ -58,7 +59,7 @@ def all_employess():
                 }
             )
 
-        return jsonify(json_employess)
+        return jsonify(json_employees)
 
 
 @app.route('/admin_panel/api/v1.0/add_employee', methods=['POST'])
@@ -99,7 +100,7 @@ def inf_about_employee(id):
 '''OPERATORS'''
 
 
-@app.route('/admin_panel/api/v1.0/all_operators', methods=['GET'])
+@app.route('/admin_panel/api/v1.0/operators', methods=['GET'])
 def all_operators():
     if request.method == 'GET':
         json_operators = []
@@ -120,5 +121,37 @@ def all_operators():
         return jsonify(json_operators)
 
 
-def index():
-    return 'Пошел нахуй'
+@app.route('/admin_panel/api/v1.0/add_operator', methods=['POST'])
+def add_operator():
+    if request.method == 'POST':
+        surname = request.json['surname']
+        name = request.json['name']
+        patronymic = request.json['patronymic']
+        login = request.json['login']
+        hash = hash_password(request.json['password'])
+        phone = request.json['phone']
+
+        call_stored_procedure('add_operator', [surname, name, patronymic, login, hash, phone], commit=True, fetchall=False)
+
+        return jsonify(f'operator {login} id add')
+
+
+@app.route('/admin_panel/api/v1.0/operators/<int:id>', methods=['GET', 'DELETE'])
+def inf_about_operator(id):
+    if request.method == 'GET':
+        inf = call_stored_procedure('inf_about_operator', [id], commit=False, fetchall=False)
+        return jsonify(
+                        {
+                            'surname': inf[0],
+                            'name': inf[1],
+                            'patronymic': inf[2],
+                            'login': inf[3],
+                            'password_hash': inf[4],
+                            'phone': inf[5]
+                        }
+        )
+
+    elif request.method == 'DELETE':
+        call_stored_procedure('delete_operator', [id], commit=True, fetchall=False)
+        return jsonify(f'operator id = {id} is delete')
+

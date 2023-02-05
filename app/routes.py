@@ -1,6 +1,7 @@
 from app import app, jsonify, request
 from app.stored_procedure import call_stored_procedure
 from app.hash import hash_password
+from app.geo import get_longitude, get_latitude
 
 
 '''BRIGADES'''
@@ -155,3 +156,71 @@ def inf_about_operator(id):
         call_stored_procedure('delete_operator', [id], commit=True, fetchall=False)
         return jsonify(f'operator id = {id} is delete')
 
+
+'''CLEINTS'''
+
+
+@app.route('/admin_panel/api/v1.0/add_phys_client', methods=['POST'])
+def add_phys_client():
+    if request.method == 'POST':
+        surname = request.json['surname']
+        name = request.json['name']
+        patronymic = request.json['patronymic']
+        phone = request.json['phone']
+        town = request.json['town']
+        street = request.json['street']
+        house = request.json['house']
+        frame = request.json['frame']
+        apartment = request.json['apartment']
+
+        place = f"{street} {house} {frame}, {town}"
+
+        longitude = get_longitude(place)
+        latitude = get_latitude(place)
+
+        call_stored_procedure(
+            'create_phys_client',
+            [
+                surname,
+                name,
+                patronymic,
+                phone,
+                town,
+                street,
+                house,
+                frame,
+                apartment,
+                longitude,
+                latitude
+            ],
+            commit=True,
+            fetchall=False
+        )
+
+        return jsonify(f'phys client {surname} {name} id add')
+
+
+@app.route('/admin_panel/api/v1.0/phys_clients/<int:id>', methods=['GET', 'DELETE'])
+def phys_clients(id):
+    if request.method == 'GET':
+        inf = call_stored_procedure('inf_about_phys_client', [id], commit=False, fetchall=False)
+        return jsonify(
+                        {
+                            'surname': inf[0],
+                            'name': inf[1],
+                            'patronymic': inf[2],
+                            'phone': inf[3],
+                            'town': inf[4],
+                            'street': inf[5],
+                            'house': inf[6],
+                            'frame': inf[7],
+                            'apartment': inf[8],
+                            'longitude': inf[9],
+                            'latitude': inf[10]
+
+                        }
+        )
+
+    elif request.method == 'DELETE':
+        call_stored_procedure('delete_operator', [id], commit=True, fetchall=False)
+        return jsonify(f'operator id = {id} is delete')

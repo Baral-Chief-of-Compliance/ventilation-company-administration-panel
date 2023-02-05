@@ -10,4 +10,4 @@ app.config.from_object(Config)
 mysql = MySQL(app)
 
 
-from app import routes, stored_procedure, hash
+from app import routes, stored_procedure, hash, geo

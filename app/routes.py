@@ -157,10 +157,36 @@ def inf_about_operator(id):
         return jsonify(f'operator id = {id} is delete')
 
 
-'''CLEINTS'''
+'''PHYS_CLIENTS'''
 
 
-@app.route('/admin_panel/api/v1.0/add_phys_client', methods=['POST'])
+@app.route('/admin_panel/api/v1.0/clients/phys_clients', methods=['GET'])
+def all_phys_clients():
+    if request.method == 'GET':
+        json_phys_clients = []
+        phys_clients = call_stored_procedure('all_phys_clients', commit=False, fetchall=True)
+
+        for cl in phys_clients:
+            json_phys_clients.append({
+                                    'id': cl[0],
+                                    'surname': cl[1],
+                                    'name': cl[2],
+                                    'patronymic': cl[3],
+                                    'phone': cl[4],
+                                    'town': cl[5],
+                                    'street': cl[6],
+                                    'house': cl[7],
+                                    'frame': cl[8],
+                                    'apartment': cl[9],
+                                    'longitude': cl[10],
+                                    'latitude': cl[11]
+                                }
+            )
+
+        return jsonify(json_phys_clients)
+
+
+@app.route('/admin_panel/api/v1.0/clients/add_phys_client', methods=['POST'])
 def add_phys_client():
     if request.method == 'POST':
         surname = request.json['surname']
@@ -200,7 +226,7 @@ def add_phys_client():
         return jsonify(f'phys client {surname} {name} id add')
 
 
-@app.route('/admin_panel/api/v1.0/phys_clients/<int:id>', methods=['GET', 'DELETE'])
+@app.route('/admin_panel/api/v1.0/clients/phys_clients/<int:id>', methods=['GET', 'DELETE'])
 def phys_clients(id):
     if request.method == 'GET':
         inf = call_stored_procedure('inf_about_phys_client', [id], commit=False, fetchall=False)
@@ -222,5 +248,5 @@ def phys_clients(id):
         )
 
     elif request.method == 'DELETE':
-        call_stored_procedure('delete_operator', [id], commit=True, fetchall=False)
-        return jsonify(f'operator id = {id} is delete')
+        call_stored_procedure('delete_phys_clients', [id], commit=True, fetchall=False)
+        return jsonify(f'phys_client id = {id} is delete')

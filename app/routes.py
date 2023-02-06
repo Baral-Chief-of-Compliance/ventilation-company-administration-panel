@@ -318,3 +318,84 @@ def entity_client(id):
     elif request.method == 'DELETE':
         call_stored_procedure('delete_entity_clients', [id], commit=True, fetchall=False)
         return jsonify(f'entity client id = {id} is delete')
+
+
+'''STACKS'''
+
+
+@app.route('/admin_panel/api/v1.0/stocks', methods=['GET'])
+def stocks():
+    if request.method == 'GET':
+        json_stocks = []
+        stocks = call_stored_procedure('all_stocks', commit=False, fetchall=True)
+
+        for st in stocks:
+            json_stocks.append({
+                                    'id': st[0],
+                                    'town': st[1],
+                                    'street': st[2],
+                                    'house': st[3],
+                                    'frame': st[4],
+                                    'apartment': st[5],
+                                    'longitude': st[6],
+                                    'latitude': st[7]
+                                }
+            )
+
+        return jsonify(json_stocks)
+
+
+@app.route('/admin_panel/api/v1.0/stocks/add_stock', methods=['POST'])
+def add_stock():
+    if request.method == 'POST':
+        town = request.json['town']
+        street = request.json['street']
+        house = request.json['house']
+        frame = request.json['frame']
+        apartment = request.json['apartment']
+
+        place = f"{street} {house} {frame}, {town}"
+
+        longitude = get_longitude(place)
+        latitude = get_latitude(place)
+
+        call_stored_procedure(
+            'add_stock',
+            [
+                town,
+                street,
+                house,
+                frame,
+                apartment,
+                longitude,
+                latitude
+            ],
+            commit=True,
+            fetchall=False
+        )
+
+        return jsonify(f'stock on {town} {street} {house} {frame} {apartment} id add')
+
+
+@app.route('/admin_panel/api/v1.0/stocks/<int:id>', methods=['GET', 'DELETE'])
+def stock(id):
+    if request.method == 'GET':
+        inf = call_stored_procedure('inf_about_stock', [id], commit=False, fetchall=False)
+        return jsonify(
+                        {
+                            'town': inf[0],
+                            'street': inf[1],
+                            'house': inf[2],
+                            'frame': inf[3],
+                            'apartment': inf[4],
+                            'longitude': inf[5],
+                            'latitude': inf[6]
+                        }
+        )
+
+    elif request.method == 'DELETE':
+        call_stored_procedure('delete_stock', [id], commit=True, fetchall=False)
+        return jsonify(f'stock id = {id} is delete')
+
+
+'''MATERIALS'''

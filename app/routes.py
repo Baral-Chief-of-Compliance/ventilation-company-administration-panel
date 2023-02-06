@@ -297,7 +297,7 @@ def add_entity_client():
             fetchall=False
         )
 
-        return jsonify(f'entity client {surname} {name} id add')
+        return jsonify(f'entity client {surname} {name} is add')
 
 
 @app.route('/admin_panel/api/v1.0/clients/entity_clients/<int:id>', methods=['GET', 'DELETE'])
@@ -399,3 +399,51 @@ def stock(id):
 
 
 '''MATERIALS'''
+
+
+@app.route('/admin_panel/api/v1.0/materials', methods=['GET'])
+def materials():
+    if request.method == 'GET':
+        json_materials = []
+        materials = call_stored_procedure('all_materials', commit=False, fetchall=True)
+
+        for m in materials:
+            json_materials.append({
+                                    'id': m[0],
+                                    'name': m[1],
+                                    'quantity': m[2],
+                                    'stack_id': m[3],
+                                    'town': m[4],
+                                    'street': m[5],
+                                    'house': m[6],
+                                    'frame': m[7],
+                                    'apartment': m[8],
+                                    'longitude': m[9],
+                                    'latitude': m[10]
+                                }
+            )
+
+        return jsonify(json_materials)
+
+
+@app.route('/admin_panel/api/v1.0/materials/add_material', methods=['POST'])
+def add_material():
+    if request.method == 'POST':
+        stock_id = request.json['stock_id']
+        name_of_material = request.json['name_of_material']
+        quantity = request.json['quantity']
+
+        call_stored_procedure(
+            'add_material',
+            [
+                stock_id,
+                name_of_material,
+                quantity
+            ],
+            commit=True,
+            fetchall=False
+        )
+
+        return jsonify(f'material: stock id:{stock_id} {name_of_material} {quantity} is add')
+
+

@@ -249,4 +249,72 @@ def phys_clients(id):
 
     elif request.method == 'DELETE':
         call_stored_procedure('delete_phys_clients', [id], commit=True, fetchall=False)
-        return jsonify(f'phys_client id = {id} is delete')
+        return jsonify(f'phys client id = {id} is delete')
+
+
+@app.route('/admin_panel/api/v1.0/clients/entity_clients', methods=['GET'])
+def all_entity_clients():
+    if request.method == 'GET':
+        json_entity_clients = []
+        entity_clients = call_stored_procedure('all_entity_clients', commit=False, fetchall=True)
+
+        for cl in entity_clients:
+            json_entity_clients.append({
+                                    'id': cl[0],
+                                    'surname': cl[1],
+                                    'name': cl[2],
+                                    'patronymic': cl[3],
+                                    'phone': cl[4],
+                                    'name_of_company': cl[5],
+                                    'inn': cl[6]
+                                }
+            )
+
+        return jsonify(json_entity_clients)
+
+
+@app.route('/admin_panel/api/v1.0/clients/add_entity_client', methods=['POST'])
+def add_entity_client():
+    if request.method == 'POST':
+        surname = request.json['surname']
+        name = request.json['name']
+        patronymic = request.json['patronymic']
+        phone = request.json['phone']
+        name_of_company = request.json['name_of_company']
+        inn = request.json['inn']
+
+        call_stored_procedure(
+            'add_entity_client',
+            [
+                surname,
+                name,
+                patronymic,
+                phone,
+                name_of_company,
+                inn
+            ],
+            commit=True,
+            fetchall=False
+        )
+
+        return jsonify(f'entity client {surname} {name} id add')
+
+
+@app.route('/admin_panel/api/v1.0/clients/entity_clients/<int:id>', methods=['GET', 'DELETE'])
+def entity_client(id):
+    if request.method == 'GET':
+        inf = call_stored_procedure('inf_about_entity_client', [id], commit=False, fetchall=False)
+        return jsonify(
+                        {
+                            'surname': inf[0],
+                            'name': inf[1],
+                            'patronymic': inf[2],
+                            'phone': inf[3],
+                            'name_of_company': inf[4],
+                            'inn': inf[5]
+                        }
+        )
+
+    elif request.method == 'DELETE':
+        call_stored_procedure('delete_entity_clients', [id], commit=True, fetchall=False)
+        return jsonify(f'entity client id = {id} is delete')

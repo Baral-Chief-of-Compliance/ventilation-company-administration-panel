@@ -447,3 +447,54 @@ def add_material():
         return jsonify(f'material: stock id:{stock_id} {name_of_material} {quantity} is add')
 
 
+'''applications'''
+
+
+@app.route('/admin_panel/api/v1.0/applications/add_application', methods=['POST'])
+def add_application():
+    if request.method == 'POST':
+        cl_id = request.json['cl_id']
+        op_id = request.json['op_id']
+        br_id = request.json['br_id']
+        date_of_order = request.json['date_of_order']
+        date_of_start_work = request.json['date_of_start_work']
+        date_of_end_work = request.json['date_of_end_work']
+        date_of_really_end_work = request.json['date_of_really_end_work']
+        days_of_delay = request.json['days_of_delay']
+        town = request.json['town']
+        street = request.json['street']
+        house = request.json['house']
+        frame = request.json['frame']
+        apartment = request.json['apartment']
+
+        place = f"{street} {house} {frame}, {town}"
+
+        longitude = get_longitude(place)
+        latitude = get_latitude(place)
+
+        call_stored_procedure(
+            'add_application',
+            [
+                cl_id,
+                op_id,
+                br_id,
+                date_of_order,
+                date_of_start_work,
+                date_of_end_work,
+                date_of_really_end_work,
+                days_of_delay,
+                town,
+                street,
+                house,
+                frame,
+                apartment,
+                longitude,
+                latitude
+            ],
+            commit=True,
+            fetchall=False
+        )
+
+        return jsonify(f'order {date_of_order}  is add')
+
+

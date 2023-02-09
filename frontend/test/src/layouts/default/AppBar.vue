@@ -1,23 +1,73 @@
 <template>
-  <v-app-bar color="indigo">
-    <v-btn>Бригада</v-btn>
-    <v-btn>Склады</v-btn>
-    <v-btn>Клиенты</v-btn>
-    <v-btn>Заказы</v-btn>
-  </v-app-bar>
+<v-card
+    class="mx-auto"
+    width="300"
+  >
+    <v-list v-model:opened="open">
+      <v-list-item prepend-icon="mdi-home" title="Home"></v-list-item>
+
+      <v-list-group value="Users">
+        <template v-slot:activator="{ props }">
+          <v-list-item
+            v-bind="props"
+            prepend-icon="mdi-account-circle"
+            title="Users"
+          ></v-list-item>
+        </template>
+
+        <v-list-group value="Admin">
+          <template v-slot:activator="{ props }">
+            <v-list-item
+              v-bind="props"
+              title="Admin"
+            ></v-list-item>
+          </template>
+
+          <v-list-item
+            v-for="([title, icon], i) in admins"
+            :key="i"
+            :title="title"
+            :prepend-icon="icon"
+            :value="title"
+          ></v-list-item>
+        </v-list-group>
+
+        <v-list-group value="Actions">
+          <template v-slot:activator="{ props }">
+            <v-list-item
+              v-bind="props"
+              title="Actions"
+            ></v-list-item>
+          </template>
+
+          <v-list-item
+            v-for="([title, icon], i) in cruds"
+            :key="i"
+            :value="title"
+            :title="title"
+            :prepend-icon="icon"
+          ></v-list-item>
+        </v-list-group>
+      </v-list-group>
+    </v-list>
+  </v-card>
 </template>
 
 <script>
   export default {
-    data () {
-      return {
-        tab: null,
-        items: [
-          'Бригада', 'Склады', 'Клиенты', 'Заказы',
-        ],
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-      }
-    },
+    data: () => ({
+      open: ['Users'],
+      admins: [
+        ['Management', 'mdi-account-multiple-outline'],
+        ['Settings', 'mdi-cog-outline'],
+      ],
+      cruds: [
+        ['Create', 'mdi-plus-outline'],
+        ['Read', 'mdi-file-outline'],
+        ['Update', 'mdi-update'],
+        ['Delete', 'mdi-delete'],
+      ],
+    }),
   }
 </script>
 

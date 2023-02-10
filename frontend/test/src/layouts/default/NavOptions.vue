@@ -3,7 +3,7 @@
     <template v-slot:activator="{ props }">
       <v-list-item
         v-bind="props"
-        prepend-icon="mdi-account-circle"
+        prepend-icon="mdi-account-multiple"
         title="Бригады"
       ></v-list-item>
     </template>
@@ -22,7 +22,7 @@
     <template v-slot:activator="{ props }">
       <v-list-item
         v-bind="props"
-        prepend-icon="mdi-account-circle"
+        prepend-icon="mdi-account-details"
         title="Клиенты"
       ></v-list-item>
     </template>
@@ -42,7 +42,7 @@
     <template v-slot:activator="{ props }">
       <v-list-item
         v-bind="props"
-        prepend-icon="mdi-account-circle"
+        prepend-icon="mdi-garage"
         title="Склады"
       ></v-list-item>
     </template>
@@ -62,7 +62,7 @@
     <template v-slot:activator="{ props }">
       <v-list-item
         v-bind="props"
-        prepend-icon="mdi-account-circle"
+        prepend-icon="mdi-application"
         title="Заказы"
       ></v-list-item>
     </template>
@@ -92,7 +92,7 @@
         ['Список', 'mdi-account-multiple']
       ],
       stocks:[
-        ['Добавить', 'mdi-account-plus'],
+        ['Добавить', 'mdi-home-plus-outline'],
         ['Найти', 'mdi-account-search'],
         ['Список', 'mdi-account-multiple']
       ],

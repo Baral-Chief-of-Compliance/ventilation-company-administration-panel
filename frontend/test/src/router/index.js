@@ -17,8 +17,13 @@ const routes = [
       {
         path: 'brigades',
         name: 'brigades',
-        component: () => import('@/views/Brigades.vue')
-      }
+        component: () => import('@/components/brigades/BrigadesInfo.vue')
+      },
+      {
+        path: 'add_brigades',
+        name: 'add_brigades',
+        component: () => import('@/components/brigades/AddBrigades.vue')
+      },
     ],
   }
 ]

@@ -1,6 +1,6 @@
 <template>
 
-    Пизда
+    Добавить бригаду
 </template>
 
 <script setup>

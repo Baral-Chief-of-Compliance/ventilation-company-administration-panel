@@ -1,0 +1,106 @@
+<template>
+    <v-list-group value="Brigades">
+    <template v-slot:activator="{ props }">
+      <v-list-item
+        v-bind="props"
+        prepend-icon="mdi-account-circle"
+        title="Бригады"
+      ></v-list-item>
+    </template>
+
+    <v-list-item
+      v-for="([title, icon, href], i) in brigades"
+      :key="i"
+      :title="title"
+      :prepend-icon="icon"
+      :value="title"
+      :href="href"
+    ></v-list-item>
+  </v-list-group>
+
+  <v-list-group value="Clients">
+    <template v-slot:activator="{ props }">
+      <v-list-item
+        v-bind="props"
+        prepend-icon="mdi-account-circle"
+        title="Клиенты"
+      ></v-list-item>
+    </template>
+
+    <v-list-item
+      v-for="([title, icon], i) in clients"
+      :key="i"
+      :title="title"
+      :prepend-icon="icon"
+      :value="title"
+    ></v-list-item>
+
+    
+  </v-list-group>
+
+  <v-list-group value="Stocks">
+    <template v-slot:activator="{ props }">
+      <v-list-item
+        v-bind="props"
+        prepend-icon="mdi-account-circle"
+        title="Склады"
+      ></v-list-item>
+    </template>
+
+    <v-list-item
+      v-for="([title, icon], i) in stocks"
+      :key="i"
+      :title="title"
+      :prepend-icon="icon"
+      :value="title"
+    ></v-list-item>
+
+    
+  </v-list-group>
+
+  <v-list-group value="Orders">
+    <template v-slot:activator="{ props }">
+      <v-list-item
+        v-bind="props"
+        prepend-icon="mdi-account-circle"
+        title="Заказы"
+      ></v-list-item>
+    </template>
+
+    <v-list-item
+      v-for="([title, icon], i) in orders"
+      :key="i"
+      :title="title"
+      :prepend-icon="icon"
+      :value="title"
+    ></v-list-item>
+
+    
+  </v-list-group>
+</template>
+
+<script>
+  export default {
+    data: () => ({
+      brigades: [
+        ['Добавить', 'mdi-account-multiple-plus', '/add_brigades'],
+        ['Список', 'mdi-account-multiple', '/brigades']
+      ],
+      clients:[
+        ['Добавить', 'mdi-account-plus'],
+        ['Найти', 'mdi-account-search'],
+        ['Список', 'mdi-account-multiple']
+      ],
+      stocks:[
+        ['Добавить', 'mdi-account-plus'],
+        ['Найти', 'mdi-account-search'],
+        ['Список', 'mdi-account-multiple']
+      ],
+      orders: [
+        ['Добавить', 'mdi-plus-outline'],
+        ['Найти', 'mdi-file-outline'],
+        ['Список', 'mdi-update']
+      ],
+    }),
+  }
+</script>

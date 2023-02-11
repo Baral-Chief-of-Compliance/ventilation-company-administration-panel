@@ -28,11 +28,12 @@
     </template>
 
     <v-list-item
-      v-for="([title, icon], i) in clients"
+      v-for="([title, icon, href], i) in clients"
       :key="i"
       :title="title"
       :prepend-icon="icon"
       :value="title"
+      :href="href"
     ></v-list-item>
 
     
@@ -87,7 +88,7 @@
         ['Список', 'mdi-account-multiple', '/brigades']
       ],
       clients:[
-        ['Добавить', 'mdi-account-plus'],
+        ['Добавить', 'mdi-account-plus', '/add_client'],
         ['Найти', 'mdi-account-search'],
         ['Список', 'mdi-account-multiple']
       ],

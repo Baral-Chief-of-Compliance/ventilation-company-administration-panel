@@ -198,7 +198,6 @@ def add_phys_client():
         house = request.json['house']
         frame = request.json['frame']
         apartment = request.json['apartment']
-
         place = f"{street} {house} {frame}, {town}"
 
         longitude = get_longitude(place)

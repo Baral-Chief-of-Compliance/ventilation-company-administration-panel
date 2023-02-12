@@ -9,12 +9,12 @@
     </template>
 
     <v-list-item
-      v-for="([title, icon, href], i) in brigades"
+      v-for="([title, icon, to], i) in brigades"
       :key="i"
       :title="title"
       :prepend-icon="icon"
       :value="title"
-      :href="href"
+      :to="to"
     ></v-list-item>
   </v-list-group>
 
@@ -28,12 +28,12 @@
     </template>
 
     <v-list-item
-      v-for="([title, icon, href], i) in clients"
+      v-for="([title, icon, to], i) in clients"
       :key="i"
       :title="title"
       :prepend-icon="icon"
       :value="title"
-      :href="href"
+      :to="to"
     ></v-list-item>
 
     

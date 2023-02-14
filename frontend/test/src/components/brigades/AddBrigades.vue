@@ -19,7 +19,11 @@
                   v-bind="props_hover"  
                 >
                 <v-hover v-slot="{ isHovering, props }">
-                  <v-card v-bind="props" height="200" width="300" class="texte-center my-8 mx-lg-auto pa-md-15" :color="isHovering ? 'indigo' : undefined">
+                  <v-card v-bind="props" height="200" width="300" 
+                    class="texte-center my-8 mx-lg-auto pa-md-15" 
+                    :color="isHovering ? 'indigo' : undefined"
+                    :to="{ name: 'brigade_inf', params: {id: el.id}}"
+                  >
                     <div class="text-h6">{{ el.name }}</div>
                   </v-card>
                 </v-hover>

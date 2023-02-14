@@ -30,8 +30,21 @@ def create_brigades():
 @app.route('/admin_panel/api/v1.0/brigades/<int:id>', methods=['GET', 'DELETE'])
 def inf_about_brigade(id):
     if request.method == 'GET':
-        inf = call_stored_procedure('inf_about_brigade', [id], commit=False, fetchall=False)
-        return jsonify({'name': inf[0]})
+        json_employess = []
+        name = call_stored_procedure('inf_about_brigade', [id], commit=False, fetchall=False)
+        emp_inf = call_stored_procedure('show_all_employess_in_brigade', [id], commit=False, fetchall=True)
+
+        for emp in emp_inf:
+            json_employess.append({
+                'id': emp[0],
+                'surname': emp[1],
+                'name': emp[2],
+                'patronymic': emp[3],
+                'position': emp[4],
+                'phone': emp[5]
+            })
+
+        return jsonify({'name': name[0], 'employees': json_employess})
 
     elif request.method == 'DELETE':
         call_stored_procedure('delete_brigade', [id], commit=True, fetchall=False)

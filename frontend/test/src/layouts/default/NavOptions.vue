@@ -84,8 +84,7 @@
   export default {
     data: () => ({
       brigades: [
-        ['Добавить', 'mdi-account-multiple-plus', '/add_brigades'],
-        ['Список', 'mdi-account-multiple', '/brigades']
+        ['Список', 'mdi-account-multiple', '/add_brigades']
       ],
       clients:[
         ['Добавить', 'mdi-account-plus', '/add_client'],

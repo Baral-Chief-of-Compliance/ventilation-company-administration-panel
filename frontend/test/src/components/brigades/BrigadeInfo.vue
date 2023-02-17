@@ -15,15 +15,12 @@
                         <div>
                             <b>{{ emp.position }}</b> {{ emp.surname }} {{ emp.name }} {{ emp.patronymic }} {{ emp.phone }}   
                         </div>
-                        <div class="ml-5">
-                            <v-btn
-                            @click="delete_employee(emp.id)"
-                            color="red"
-                            icon="mdi-close"
-                            size="x-small"
-                            ></v-btn>
-                        </div> 
                     </v-card>
+                    <v-card-actions class="mt-3">
+                    <v-spacer></v-spacer>
+                    <v-btn variant="outlined" color="red"  @click="delete_employee(emp.id)"
+                    >Удалить</v-btn>
+                  </v-card-actions>
                 </v-row>
                 <v-row class="mx-14 mt-15">
                     <v-btn block

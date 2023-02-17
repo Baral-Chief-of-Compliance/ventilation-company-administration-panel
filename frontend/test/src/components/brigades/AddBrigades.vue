@@ -20,12 +20,21 @@
                 >
                 <v-hover v-slot="{ isHovering, props }">
                   <v-card v-bind="props" height="200" width="300" 
-                    class="texte-center my-8 mx-lg-auto pa-md-15" 
+                    class="mx-auto" 
                     :color="isHovering ? 'indigo' : undefined"
                     :to="{ name: 'brigade_inf', params: {id: el.id}}"
                   >
-                    <div class="text-h6">{{ el.name }}</div>
+                  <v-card-item class="text-h6">
+                    {{ el.name }}
+                  </v-card-item>
+   
                   </v-card>
+                  <v-card-actions class="mt-3">
+                    <v-spacer></v-spacer>
+                    <v-btn @click="delete_brigade(el.id)" variant="outlined" color="red"
+                    >Удалить</v-btn>
+                  </v-card-actions>
+
                 </v-hover>
                 </v-col>
               </v-row>
@@ -88,11 +97,19 @@ import axios from 'axios'
         this.brigades_name = null
         this.dialog = false
 
-        }
+        },
+      get_data(){
+        axios.get('http://127.0.0.1:5000/admin_panel/api/v1.0/brigades')
+        .then(response => (this.allBrigades = response.data))
+      },
+      delete_brigade(id){
+        axios.delete(`http://127.0.0.1:5000/admin_panel/api/v1.0/brigades/${id}`).then(
+                (employees)=>this.get_data()
+        )
+      }
     },
     updated(){
-      axios.get('http://127.0.0.1:5000/admin_panel/api/v1.0/brigades')
-      .then(response => (this.allBrigades = response.data))
+      this.get_data()
     }
   }
 </script>

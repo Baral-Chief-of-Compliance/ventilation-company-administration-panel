@@ -79,10 +79,6 @@ import axios from 'axios'
         brigades_name: null
       }
     },
-    mounted(){
-      axios.get('http://127.0.0.1:5000/admin_panel/api/v1.0/brigades')
-      .then(response => (this.allBrigades = response.data))
-    },
     methods: {
       create_brigade(){
         axios.post('http://127.0.0.1:5000/admin_panel/api/v1.0/create_brigades',{

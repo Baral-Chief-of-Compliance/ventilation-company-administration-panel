@@ -49,11 +49,12 @@
     </template>
 
     <v-list-item
-      v-for="([title, icon], i) in stocks"
+      v-for="([title, icon, to], i) in stocks"
       :key="i"
       :title="title"
       :prepend-icon="icon"
       :value="title"
+      :to="to"
     ></v-list-item>
 
     
@@ -92,9 +93,9 @@
         ['Список', 'mdi-account-multiple']
       ],
       stocks:[
+        ['Список', 'mdi-garage', '/stocks'],
         ['Добавить', 'mdi-home-plus-outline'],
-        ['Найти', 'mdi-account-search'],
-        ['Список', 'mdi-account-multiple']
+        ['Найти', 'mdi-account-search']
       ],
       orders: [
         ['Добавить', 'mdi-plus-outline'],

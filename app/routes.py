@@ -364,7 +364,6 @@ def add_stock():
         street = request.json['street']
         house = request.json['house']
         frame = request.json['frame']
-        apartment = request.json['apartment']
 
         place = f"{street} {house} {frame}, {town}"
 
@@ -378,7 +377,6 @@ def add_stock():
                 street,
                 house,
                 frame,
-                apartment,
                 longitude,
                 latitude
             ],
@@ -386,7 +384,7 @@ def add_stock():
             fetchall=False
         )
 
-        return jsonify(f'stock on {town} {street} {house} {frame} {apartment} id add')
+        return jsonify(f'stock on {town} {street} {house} {frame} id add')
 
 
 @app.route('/admin_panel/api/v1.0/stocks/<int:id>', methods=['GET', 'DELETE'])

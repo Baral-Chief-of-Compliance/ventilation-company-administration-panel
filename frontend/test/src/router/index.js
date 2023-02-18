@@ -33,6 +33,11 @@ const routes = [
         path: 'add_brigades/:id',
         name: 'brigade_inf',
         component: () => import('@/components/brigades/BrigadeInfo.vue')
+      },
+      {
+        path: 'stocks',
+        name: 'stocks',
+        component: () => import('@/components/stocks/Stocks.vue')
       }
     ],
   }

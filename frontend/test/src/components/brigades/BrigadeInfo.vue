@@ -35,9 +35,9 @@
       </template>
 
       <v-card>
-        <v-card-text>
+        <v-card-title>
           Форма для добавления сотрудника
-        </v-card-text>
+        </v-card-title>
         <v-form  class="mx-5 mb-5">
           <v-text-field
             v-model="surname"

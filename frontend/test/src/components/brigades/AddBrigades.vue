@@ -54,9 +54,9 @@
       </template>
 
       <v-card>
-        <v-card-text>
+        <v-card-title>
           Форма для добавления бригады
-        </v-card-text>
+        </v-card-title>
         <v-form>
           <v-text-field
             v-model="brigades_name"

@@ -94,8 +94,7 @@
       ],
       stocks:[
         ['Список', 'mdi-garage', '/stocks'],
-        ['Добавить', 'mdi-home-plus-outline'],
-        ['Найти', 'mdi-account-search']
+        ['Карта', 'mdi-map', '/map_stocks']
       ],
       orders: [
         ['Добавить', 'mdi-plus-outline'],

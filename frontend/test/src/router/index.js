@@ -43,6 +43,11 @@ const routes = [
         path: 'stocks/:id',
         name: 'stock_inf',
         component: () => import('@/components/stocks/StockInfo.vue')
+      },
+      {
+        path: 'map_stocks',
+        name: 'map_stocks',
+        component: () => import('@/components/stocks/MapStocks.vue')
       }
     ],
   }

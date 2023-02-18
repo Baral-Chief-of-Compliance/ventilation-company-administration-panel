@@ -32,6 +32,10 @@
               </v-row>
           </v-col>
       </v-container>
+
+      <div class="py-6 mx-10 d-flex justify-center">
+        <MapForOne :latitude="latitude" :longitude="longitude" />
+      </div>
     </template>
 
     <v-card>
@@ -60,12 +64,15 @@
   </v-dialog>
 </div>
 
+
+
 </template>
 
 
 
 <script>
 import axios from 'axios';
+import MapForOne from '@/components/Map/MapForOne.vue'
 
 
 export default{
@@ -75,11 +82,16 @@ export default{
         street: null,
         house: null,
         frame: null,
+        latitude: null,
+        longitude: null,
         materials: null,
         name_of_material: null,
         quantity: null,
         dialog: false
       }
+  },
+  components: {
+    MapForOne
   },
   updated(){
       this.get_data()
@@ -103,6 +115,8 @@ export default{
               this.street = response.data.address.street,
               this.house = response.data.address.house,
               this.frame = response.data.address.frame,
+              this.latitude = response.data.address.latitude,
+              this.longitude = response.data.address.longitude,
               this.materials = response.data.materials
           ))
       },

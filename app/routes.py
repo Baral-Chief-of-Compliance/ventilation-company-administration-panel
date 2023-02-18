@@ -390,16 +390,29 @@ def add_stock():
 @app.route('/admin_panel/api/v1.0/stocks/<int:id>', methods=['GET', 'DELETE'])
 def stock(id):
     if request.method == 'GET':
+        json_materials = []
         inf = call_stored_procedure('inf_about_stock', [id], commit=False, fetchall=False)
+        materials_inf = call_stored_procedure('show_all_materials_in_stock', [id], commit=False, fetchall=True)
+
+        for mat in materials_inf:
+            json_materials.append({
+                'id': mat[0],
+                'name': mat[2],
+                'quantity': mat[3]
+            })
+
         return jsonify(
                         {
-                            'town': inf[0],
-                            'street': inf[1],
-                            'house': inf[2],
-                            'frame': inf[3],
-                            'apartment': inf[4],
-                            'longitude': inf[5],
-                            'latitude': inf[6]
+                            'address': {
+                                'town': inf[0],
+                                'street': inf[1],
+                                'house': inf[2],
+                                'frame': inf[3],
+                                'apartment': inf[4],
+                                'longitude': inf[5],
+                                'latitude': inf[6]
+                            },
+                            'materials': json_materials
                         }
         )
 
@@ -434,6 +447,13 @@ def materials():
             )
 
         return jsonify(json_materials)
+
+
+@app.route('/admin_panel/api/v1.0/materials/<int:id>', methods=['GET', 'DELETE'])
+def material_info(id):
+    if request.method == 'DELETE':
+        call_stored_procedure('delete_material', [id], commit=True, fetchall=False)
+        return jsonify(f'material id = {id} is delete')
 
 
 @app.route('/admin_panel/api/v1.0/materials/add_material', methods=['POST'])

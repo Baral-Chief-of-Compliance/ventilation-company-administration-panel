@@ -38,6 +38,11 @@ const routes = [
         path: 'stocks',
         name: 'stocks',
         component: () => import('@/components/stocks/Stocks.vue')
+      },
+      {
+        path: 'stocks/:id',
+        name: 'stock_inf',
+        component: () => import('@/components/stocks/StockInfo.vue')
       }
     ],
   }

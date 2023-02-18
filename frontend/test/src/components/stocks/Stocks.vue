@@ -22,7 +22,7 @@
                     <v-card v-bind="props" height="200" width="300" 
                       class="mx-auto" 
                       :color="isHovering ? 'indigo' : undefined"
-                      :to="{ name: 'brigade_inf', params: {id: el.id}}"
+                      :to="{ name: 'stock_inf', params: {id: el.id}}"
                     >
                     <v-card-item class="text-h6">
                       {{ el.town }} {{ el.street }} {{ el.house }} {{ el.frame }}

@@ -1218,6 +1218,11 @@ vue-router@^4.0.0:
   dependencies:
     "@vue/devtools-api" "^6.4.5"
 
+vue-yandex-maps@^0.12.3:
+  version "0.12.3"
+  resolved "https://registry.npmjs.org/vue-yandex-maps/-/vue-yandex-maps-0.12.3.tgz"
+  integrity sha512-xvj1GGavzrXCq40swfTgf7UK7uKXgb0flq45mlA70QSNPWvjiB0PXJGnc/Bz1tvu1M2nQix0AMqGfgTEesYs5w==
+
 vue@^3.0.0, vue@^3.2.0, vue@^3.2.13, vue@^3.2.25, vue@3.2.47:
   version "3.2.47"
   resolved "https://registry.npmjs.org/vue/-/vue-3.2.47.tgz"

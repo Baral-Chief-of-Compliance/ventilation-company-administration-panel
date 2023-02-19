@@ -1,11 +1,6 @@
-<template>
-    <div class="text-center">
-        <v-dialog
-        v-model="dialog"
-        width="auto"
-        >
 
-                <template v-slot:activator="{ props }">
+
+                <template>
                     <div class="text-h3 py-6 mx-10 text-left">Добавить заявку</div>
 
                     <div class="py-6 mx-10 d-flex justify-center">
@@ -57,12 +52,11 @@
                                 ></v-combobox>
                             </v-row>
                             <v-row class="ma-10" v-else-if="stage === 2">
-                                <v-btn block
-                                    color="indigo"
-                                    v-bind="props"
-                                    >
-                                    Добавить склад
-                                </v-btn>
+                                <v-col>
+                                    <v-card v-for="mat in stocks_info" class="my-2 pa-6 mx-14 d-flex flex-row" >
+                                        <b>{{ mat.name }}</b> <v-spacer></v-spacer> Количество: <b>{{ mat.quantity }}</b>/ <v-text-field  type="number" hide-details density="compact" :min="0" :max="mat.quantity"></v-text-field>
+                                    </v-card>
+                                </v-col>
                             </v-row>
                                 <div v-else>
                                     Нихуя нет
@@ -86,53 +80,15 @@
                                 {{ phys_check }}
                                 {{ entity_check }}
                                 {{ stock_id }}
+                                {{ stocks_info }}
+                                {{ stocks_info.materials }}
+                                {{ list_name }}
                             </v-row>
                         </v-col>
                     </div>
 
                 </template>
 
-                <v-card>
-                    <v-card-title>
-                        Форма для добавления материала в заказ
-                    </v-card-title>
-                    <v-form  class="mx-5 mb-5">
-                        <v-text-field
-                            v-model="stock_town"
-                            label="город"
-                            color="indigo"
-                        >
-                        </v-text-field>
-
-                        <v-text-field
-                            v-model="stock_street"
-                            label="улица"
-                            color="indigo"
-                        >
-                        </v-text-field>
-
-                        <v-text-field
-                            v-model="stock_house"
-                            label="дом"
-                            color="indigo"
-                        >
-                        </v-text-field>
-
-                        <v-text-field
-                            v-model="stock_frame"
-                            label="корпус"
-                            color="indigo"
-                        >
-                        </v-text-field>
-                    </v-form>
-                    <v-card-actions>
-                        <v-btn color="red"  @click="dialog = false">Закрыть</v-btn>
-                        <v-btn color="green"  @click="add_stock">Добавить</v-btn>
-                    </v-card-actions>
-                </v-card>
-        </v-dialog>
-    </div>
-</template>
 
 <script>
 import axios from 'axios'
@@ -146,6 +102,8 @@ import axios from 'axios'
                 phys_clients: [],
                 entity_clients: [],
                 stocks: [],
+
+                stocks_info: [],
 
                 phys_check : null,
                 entity_check: null,
@@ -183,6 +141,15 @@ import axios from 'axios'
             get_stock_id(){
                 let array_stock = this.stock_check.split(' ')
                 this.stock_id = array_stock[1]
+                this.get_materials_from_stock(this.stock_id)
+            },
+            get_materials_from_stock(id){
+                axios.get(`http://127.0.0.1:5000/admin_panel/api/v1.0/stocks/${id}`)
+                .then(response => (this.stocks_info = response.data.materials))
+
+                for (const el in this.stocks_info){
+                        console.log(el)
+            }
             }
         }
     }

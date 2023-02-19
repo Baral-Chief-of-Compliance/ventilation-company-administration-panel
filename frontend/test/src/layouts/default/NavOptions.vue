@@ -70,11 +70,12 @@
     </template>
 
     <v-list-item
-      v-for="([title, icon], i) in orders"
+      v-for="([title, icon, to], i) in orders"
       :key="i"
       :title="title"
       :prepend-icon="icon"
       :value="title"
+      :to="to"
     ></v-list-item>
 
     
@@ -97,7 +98,7 @@
         ['Карта', 'mdi-map', '/map_stocks']
       ],
       orders: [
-        ['Добавить', 'mdi-plus-outline'],
+        ['Добавить', 'mdi-plus-outline', '/add_application'],
         ['Найти', 'mdi-file-outline'],
         ['Список', 'mdi-update']
       ],

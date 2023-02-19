@@ -478,6 +478,39 @@ def add_material():
 
 
 '''applications'''
+@app.route('/admin_panel/api/v1.0/applications/all_phys_client_apllication', methods=['GET'])
+def all_phys_client_apllication():
+    if request.method == 'GET':
+        json_phys_clients = []
+        phys_clients = call_stored_procedure('all_phys_client_apllication', commit=False, fetchall=True)
+
+        for p in phys_clients:
+            json_phys_clients.append(f'{p[1]} {p[2]} {p[3]} {p[4]}')
+
+        return jsonify(json_phys_clients)
+
+
+@app.route('/admin_panel/api/v1.0/applications/all_entity_client_apllication', methods=['GET'])
+def all_entity_client_apllication():
+    if request.method == 'GET':
+        json_entity_clients = []
+        entity_clients = call_stored_procedure('all_entity_client_apllication', commit=False, fetchall=True)
+
+        for e in entity_clients:
+            json_entity_clients.append(f'{e[1]} {e[2]} {e[3]} {e[4]} {e[5]}')
+
+        return jsonify(json_entity_clients)
+
+@app.route('/admin_panel/api/v1.0/applications/all_stocks_apllication', methods=['GET'])
+def all_stocks_apllication():
+    if request.method == 'GET':
+        json_stocks = []
+        stocks = call_stored_procedure('all_stocks', commit=False, fetchall=True)
+
+        for st in stocks:
+            json_stocks.append(f'Склад {st[0]} адрес: г.{st[1]} ул.{st[2]} д.{st[3]} {st[4]}')
+
+        return jsonify(json_stocks)
 
 
 @app.route('/admin_panel/api/v1.0/applications/add_application', methods=['POST'])

@@ -48,6 +48,11 @@ const routes = [
         path: 'map_stocks',
         name: 'map_stocks',
         component: () => import('@/components/stocks/MapStocks.vue')
+      },
+      {
+        path: 'add_application',
+        name: 'add_application',
+        component: () => import('@/components/applications/AddApplications.vue')
       }
     ],
   }

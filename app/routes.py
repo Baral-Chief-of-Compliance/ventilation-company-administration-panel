@@ -1,14 +1,91 @@
-from app import app, jsonify, request
+from app import app, jsonify, request, jwt, datetime, timedelta, current_app, wraps
 from app.stored_procedure import call_stored_procedure
-from app.hash import hash_password
+from app.hash import hash_password, check_password
 from app.geo import get_longitude, get_latitude
+
+
+'''JWT'''
+
+
+def token_required(f):
+    @wraps(f)
+    def _verify(*args, **kwargs):
+
+        auth_headers = request.headers.get('Authorization', '').split()
+        print(auth_headers)
+        print(len(auth_headers))
+        invalid_msg = {
+            'message': 'Invalid token. Registeration and / or authentication required',
+            'authenticated': False
+        }
+
+        expired_msg = {
+            'message': 'Expired token. Reauthentication required.',
+            'authenticated': False
+        }
+
+        # if len(auth_headers) != 2:
+        #     return jsonify(invalid_msg), 401
+
+        try:
+            token = auth_headers[0]
+
+            data = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
+            operator_login = data['login']
+
+            if not call_stored_procedure('get_inf_operator', [operator_login], commit=False, fetchall=False):
+                raise RuntimeError('User not found')
+
+            return f(operator_login, *args, **kwargs)
+
+        except jwt.ExpiredSignatureError:
+            return jsonify(expired_msg), 401
+        except (jwt.InvalidTokenError, Exception) as e:
+            print(e)
+            return jsonify(invalid_msg), 401
+
+    return _verify
+
+
+'''LOGIN'''
+
+
+@app.route('/admin_panel/api/v1.0/login', methods=['POST'])
+def login():
+    if request.method == 'POST':
+        operator_login = request.json['login']
+        password = request.json['password']
+        hash_pass = call_stored_procedure('get_hash_pass', [operator_login], commit=False, fetchall=False)
+
+        if not check_password(password, hash_pass[0]):
+            return jsonify({'message': 'Invalid credentials', 'authenticated': False}), 401
+
+        operator_inf = call_stored_procedure('get_inf_operator', [operator_login], commit=False, fetchall=False)
+        token = jwt.encode(
+            {
+                'id': operator_inf[0],
+                'surname': operator_inf[1],
+                'name': operator_inf[2],
+                'patronymic': operator_inf[3],
+                'login': operator_inf[4],
+                'phone': operator_inf[6],
+                'iat': datetime.utcnow(),
+                'exp': datetime.utcnow() + timedelta(minutes=30)
+            },
+            current_app.config['SECRET_KEY']
+        )
+
+        print(token)
+
+        return jsonify({'token': token})
 
 
 '''BRIGADES'''
 
 
 @app.route('/admin_panel/api/v1.0/brigades', methods=['GET'])
-def all_brigades():
+@token_required
+def all_brigades(current_user):
     if request.method == 'GET':
         json_brigades = []
         brigades = call_stored_procedure('all_brigades', commit=False, fetchall=True)

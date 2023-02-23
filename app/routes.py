@@ -50,9 +50,9 @@ def token_required(f):
 '''LOGIN'''
 
 
-@app.route('/admin_panel/api/v1.0/login', methods=['POST'])
+@app.route('/admin_panel/api/v1.0/login', methods=['GET'])
 def login():
-    if request.method == 'POST':
+    if request.method == 'GET':
         operator_login = request.json['login']
         password = request.json['password']
         hash_pass = call_stored_procedure('get_hash_pass', [operator_login], commit=False, fetchall=False)

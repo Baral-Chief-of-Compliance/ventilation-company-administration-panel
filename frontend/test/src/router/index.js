@@ -1,5 +1,7 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth_store'
+
 
 const routes = [
   {
@@ -66,6 +68,18 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+})
+
+router.beforeEach(async (to) => {
+  const publickPages = ['/login']
+  const authRequired = !publickPages.includes(to.path);
+  const login = 'login'
+  const pass = 'pass'
+  const auth = useAuthStore()
+
+  if (authRequired && !auth.user){
+    return '/login'
+  }
 })
 
 export default router

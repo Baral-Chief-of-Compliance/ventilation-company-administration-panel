@@ -25,7 +25,7 @@
                     </v-text-field>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="green">Войти</v-btn>
+                        <v-btn color="green" @click="enter_into_system(login, password)">Войти</v-btn>
                     </v-card-actions>
                 </v-card-item>
             </v-card>
@@ -37,11 +37,22 @@
 </template>
 
 <script>
+import { useAuthStore } from '@/stores/auth_store';
+ 
+const store = useAuthStore()
     export default{
         data(){
             return{
                 login: null,
                 password: null
+            }
+        },
+        methods: {
+            enter_into_system(login, password){
+                store.login(login, password)
+
+                this.login = '',
+                this.password = ''
             }
         }
     }

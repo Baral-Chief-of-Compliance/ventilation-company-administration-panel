@@ -1,4 +1,4 @@
-from app import bcrypt
+import bcrypt
 
 
 def hash_password(password):

@@ -2,42 +2,28 @@ import { defineStore } from "pinia";
 import axios from "axios";
 
 
-export const useAuthStore = defineStore({
-    id: 'user',
-    state: () => ({
-      login: '',
-      name: '',
-      surname: '',
-      patronymic: '',
-      phone: '',
-      JWT: '',
-      op_id: ''
-    }),
-
+export const useAuthStore = defineStore('user',{
+    state: () => {
+        return {
+            authUser: null
+        }
+    },
+    getters: {
+        user: (state) => state.authUser
+    },
     actions: {
         async login(login, password){
 
             let JWT = ''
 
-            axios.get('http://127.0.0.1:5000/admin_panel/api/v1.0/login', {
+            axios.post('http://127.0.0.1:5000/admin_panel/api/v1.0/login', {
                 login: login,
                 password: password
             }).then(
                 response => (
-                    JWT = response.data.token
+                    this.authUser = response.data.token
                 )
             )
-
-            localStorage.setItem('user', {
-                'login': 'admin',
-                'name': 'Кто',
-                'surname': 'Я',
-                'patronymic': 'Ебаный',
-                'phone': 'Стыд',
-                'JWT': JWT,
-                'op_id': '1'
-            })
-
             // router.push('/');
         },
         logout(){

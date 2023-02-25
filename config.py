@@ -11,3 +11,5 @@ class Config(object):
     MYSQL_USER = os.getenv('MYSQL_USER')
     MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD')
     MYSQL_DB = os.getenv('MYSQL_DB')
+    JWT_SECRET_KEY = os.getenv('SECRET_KEY')
+    JWT_TOKEN_LOCATION = ['cookies']

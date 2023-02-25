@@ -23,6 +23,7 @@
                         color="indigo"
                     >
                     </v-text-field>
+                    {{ user }}
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="green" @click="enter_into_system(login, password)">Войти</v-btn>
@@ -38,21 +39,27 @@
 
 <script>
 import { useAuthStore } from '@/stores/auth_store';
- 
-const store = useAuthStore()
-    export default{
-        data(){
-            return{
-                login: null,
-                password: null
-            }
-        },
-        methods: {
-            enter_into_system(login, password){
-                store.login(login, password)
+import { ref } from 'vue';
 
-                this.login = '',
-                this.password = ''
+ 
+    export default{
+        setup(){
+            const user = useAuthStore()
+
+            const login = ref('')
+            const password = ref('')
+
+            function enter_into_system(login, password){
+                user.login(login, password)
+            }
+
+
+            return {
+                user,
+                login,
+                password,
+
+                enter_into_system
             }
         }
     }

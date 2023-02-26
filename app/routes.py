@@ -9,36 +9,6 @@ from flask_jwt_extended import unset_jwt_cookies, jwt_required
 '''LOGIN'''
 
 
-@app.route('/admin_panel/api/v1.0/login', methods=['POST'])
-def login():
-    if request.method == 'POST':
-        operator_login = request.json['login']
-        password = request.json['password']
-        hash_password = call_stored_procedure('get_hash_pass', [operator_login], commit=False, fetchall=False)
-
-        if not check_password(password, hash_password[0]):
-            return jsonify({'message': 'Invalid credentials', 'authenticated': False}), 401
-
-        operator_inf = call_stored_procedure('get_inf_operator', [operator_login], commit=False, fetchall=False)
-
-        access_token = create_access_token(identity=operator_inf[0])
-        refresh_token = create_refresh_token(identity=operator_inf[0])
-
-        response = jsonify({'login': True})
-
-        set_access_cookies(response, access_token)
-        set_refresh_cookies(response, refresh_token)
-        return response, 201
-
-
-@app.route('/admin_panel/api/v1.0/logout', methods=['POST'])
-def logout():
-    if request.method == 'POST':
-        response = jsonify()
-        unset_jwt_cookies(response)
-        return response, 200
-
-
 '''BRIGADES'''
 
 

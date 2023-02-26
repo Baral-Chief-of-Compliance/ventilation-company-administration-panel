@@ -54,7 +54,7 @@
                             <v-row class="ma-10" v-else-if="stage === 2">
                                 <v-col>
                                     <v-card v-for="mat in stocks_info" class="my-2 pa-6 mx-14 d-flex flex-row" >
-                                        <b>{{ mat.name }}</b> <v-spacer></v-spacer> Количество: <b>{{ mat.quantity }}</b>/ <v-text-field  type="number" hide-details density="compact" :min="0" :max="mat.quantity"></v-text-field>
+                                        <b>{{ mat.name }}</b> <v-spacer></v-spacer> Количество: <b>{{ mat.quantity }}</b>/ <v-text-field v-model="data[mat.id]" type="number" hide-details density="compact" :min="0" :max="mat.quantity"></v-text-field> <v-btn color="green" variant="outlined" @click="addItem(mat.id, data[mat.id])">Добавить</v-btn><v-btn color="red" variant="outlined" @click="removeItem(mat.id)">Удалить</v-btn>
                                     </v-card>
                                 </v-col>
                             </v-row>
@@ -83,6 +83,7 @@
                                 {{ stocks_info }}
                                 {{ stocks_info.materials }}
                                 {{ list_name }}
+                                {{ cart }}
                             </v-row>
                         </v-col>
                     </div>
@@ -92,6 +93,9 @@
 
 <script>
 import axios from 'axios'
+import { useCartStore } from '@/stores/card'
+import { mapState, mapActions } from 'pinia'
+
 
     export default{
         data(){
@@ -102,6 +106,7 @@ import axios from 'axios'
                 phys_clients: [],
                 entity_clients: [],
                 stocks: [],
+                data: [],
 
                 stocks_info: [],
 
@@ -111,12 +116,17 @@ import axios from 'axios'
                 stock_id: null
             }
         },
+        computed: {
+            ...mapState(useCartStore, ['cart']),
+        },
         mounted(){
             this.all_phys_client_apllication()
             this.all_entity_client_apllication()
             this.all_stocks_application()
         },
         methods: {
+            ...mapActions(useCartStore, ['addItem']),
+            ...mapActions(useCartStore, ['removeItem']),
             enter_stage(){
                 if (this.stage === 1){
                     this.get_stock_id()

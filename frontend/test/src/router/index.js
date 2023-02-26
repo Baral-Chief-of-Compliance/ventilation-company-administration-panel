@@ -70,16 +70,16 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach(async (to) => {
-  const publickPages = ['/login']
-  const authRequired = !publickPages.includes(to.path);
-  const login = 'login'
-  const pass = 'pass'
-  const auth = useAuthStore()
+// router.beforeEach(async (to) => {
+//   const publickPages = ['/login']
+//   const authRequired = !publickPages.includes(to.path);
+//   const login = 'login'
+//   const pass = 'pass'
+//   const auth = useAuthStore()
 
-  if (authRequired && !auth.user){
-    return '/login'
-  }
-})
+//   if (authRequired && !auth.user){
+//     return '/login'
+//   }
+// })
 
 export default router

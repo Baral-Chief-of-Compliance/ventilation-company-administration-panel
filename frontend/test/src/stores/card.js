@@ -7,6 +7,12 @@ export const useCartStore = defineStore({
         rawItems: {}
     }),
 
+    getters: {
+        items(state){
+            return state.rawItems
+        }
+    },
+
     actions: {
         addItem(id, quantity){
             this.rawItems[id] = quantity

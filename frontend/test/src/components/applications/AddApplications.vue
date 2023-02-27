@@ -110,8 +110,8 @@
                             </v-row>
 
                             <v-row class="ma-10">
-                                {{ phys_check }}
-                                {{ entity_check }}
+                                {{ phys_check.split(' ')[3] }}
+                                {{ entity_check.split(' ')[5] }}
                                 {{ stock_id }}
                                 {{ date_create }}
                                 {{ date_start_work }}
@@ -151,10 +151,10 @@ import { mapState, mapActions } from 'pinia'
                 stocks_info: [],
                 selected_brigade: 0,
 
-                phys_check : null,
-                entity_check: null,
-                stock_check: null,
-                stock_id: null
+                phys_check : '',
+                entity_check: '',
+                stock_check: '',
+                stock_id: ''
             }
         },
         computed: {
@@ -204,7 +204,13 @@ import { mapState, mapActions } from 'pinia'
             get_brigades(){
                 axios.get('http://127.0.0.1:5000/admin_panel/api/v1.0/brigades')
                 .then(response => (this.brigades_info = response.data))
-            }
+            },
+
+            // send_data_about_application(){
+            //     axios.post('http://127.0.0.1:5000/admin_panel/api/v1.0/applications/add_application', {
+            //         phone: 
+            //     })
+            // }
         }
     }
 </script>

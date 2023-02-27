@@ -521,19 +521,17 @@ def all_stocks_apllication():
 @app.route('/admin_panel/api/v1.0/applications/add_application', methods=['POST'])
 def add_application():
     if request.method == 'POST':
-        cl_id = request.json['cl_id']
+        phone = request.json['phone']
         op_id = request.json['op_id']
         br_id = request.json['br_id']
-        date_of_order = request.json['date_of_order']
-        date_of_start_work = request.json['date_of_start_work']
-        date_of_end_work = request.json['date_of_end_work']
-        date_of_really_end_work = request.json['date_of_really_end_work']
-        days_of_delay = request.json['days_of_delay']
         town = request.json['town']
         street = request.json['street']
         house = request.json['house']
         frame = request.json['frame']
         apartment = request.json['apartment']
+        date_create = request.json['date_create']
+        date_of_start_work = request.json['date_of_start_work']
+        date_of_end_work = request.json['date_of_end_work']
 
         place = f"{street} {house} {frame}, {town}"
 
@@ -543,26 +541,24 @@ def add_application():
         call_stored_procedure(
             'add_application',
             [
-                cl_id,
+                phone,
                 op_id,
                 br_id,
-                date_of_order,
-                date_of_start_work,
-                date_of_end_work,
-                date_of_really_end_work,
-                days_of_delay,
                 town,
                 street,
                 house,
                 frame,
                 apartment,
                 longitude,
-                latitude
+                latitude,
+                date_create,
+                date_of_start_work,
+                date_of_end_work
             ],
             commit=True,
             fetchall=False
         )
 
-        return jsonify(f'order {date_of_order}  is add')
+        return jsonify(f'order {date_create}  is add')
 
 

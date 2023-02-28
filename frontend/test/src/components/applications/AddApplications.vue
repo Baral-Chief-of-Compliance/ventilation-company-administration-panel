@@ -7,49 +7,77 @@
                         <v-col>
                             <v-row class="ma-10" v-if="stage === 0">
 
+                                    <v-radio-group v-model="selected" inline>
+                                        <v-radio 
+                                            label="Физическое лицо" 
+                                            value="phys" 
+                                            color="indigo"
+                                            >
+                                        </v-radio>
 
-                                <v-radio-group v-model="selected">
-                                    <v-radio 
-                                        label="Физическое лицо" 
-                                        value="phys" 
-                                        color="indigo"
-                                        >
-                                    </v-radio>
+                                        <v-radio 
+                                            label="Юридическое лицо" 
+                                            value="entity" 
+                                            color="indigo"
+                                            >
+                                        </v-radio>
+                                    </v-radio-group>
 
-                                    <v-radio 
-                                        label="Юридическое лицо" 
-                                        value="entity" 
-                                        color="indigo"
-                                        >
-                                    </v-radio>
-                                </v-radio-group>
+                            </v-row>
+            
 
-                                <v-combobox
+                            <v-row class="ma-10" v-if="stage === 0">
+                                <v-card
                                     v-show="selected === 'phys'"
                                     v-model="phys_check"
-                                    label="Физическое лицо"
-                                    color="indigo"
-                                    :items="phys_clients"
+                                    class="overflow-y-auto"
+                                    max-height="600"
 
-                                ></v-combobox>
+                                >
+                                    <v-card-text>
+                                        <v-radio-group v-model="ph_id">
+                                                <v-radio color="indigo"  v-for="ph in phys_clients"
+                                                    :value="ph.id"
+                                                    :label="`${ph.surname} ${ph.name} ${ph.patronymic} ${ph.phone}`"
+                                                    >
+                                                </v-radio>
+ 
+                                        </v-radio-group>
 
-                                <v-combobox
+                                    </v-card-text>
+                                
+                            
+                                </v-card>
+
+                                <v-card
                                     v-show="selected === 'entity'"
                                     v-model="entity_check"
-                                    label="Юридическое лицо"
-                                    color="indigo"
-                                    :items="entity_clients"
-                                ></v-combobox>
+
+                                >
+                                    <v-card-text>
+                                        <v-radio-group v-model="en_id">
+                                            <v-radio color="indigo" v-for="en in entity_clients"
+                                                :value="en.id"
+                                                :label="`${en.surname} ${en.name} ${en.patronymic} ${en.name_of_company} ${en.phone}`"
+                                            >
+                                            </v-radio>
+                                        </v-radio-group>
+
+                                    </v-card-text>
+                            
+                                </v-card>
 
                             </v-row>
                                         
                             <v-row class="ma-10" v-else-if="stage === 1">
-                                <v-combobox
-                                    v-model="stock_check"
-                                    label="Склад"
-                                    color="indigo"
-                                    :items="stocks"
-                                ></v-combobox>
+                                <v-radio-group v-model="stock_id">
+                                    <v-radio v-for="st in stocks"
+                                        :label="`Склад по адресу г. ${st.town} ул. ${st.street} д. ${st.house} к. ${st.frame}`" 
+                                        :value="st.id" 
+                                        color="indigo"
+                                    >
+                                    </v-radio>
+                                </v-radio-group>
                             </v-row>
 
                             <v-row class="ma-10" v-else-if="stage === 2">
@@ -117,6 +145,8 @@
                                 {{ date_start_work }}
                                 {{ date_end_work }}
                                 {{  selected_brigade }}
+                                {{ ph_id }}
+                                {{ en_id }}
                             </v-row>
                         </v-col>
                     </div>
@@ -147,6 +177,8 @@ import { mapState, mapActions } from 'pinia'
                 street: '',
                 house: '',
                 frame: '',
+                ph_id: 0,
+                en_id: 0,
 
                 stocks_info: [],
                 selected_brigade: 0,
@@ -155,6 +187,7 @@ import { mapState, mapActions } from 'pinia'
                 entity_check: '',
                 stock_check: '',
                 stock_id: ''
+
             }
         },
         computed: {
@@ -181,20 +214,18 @@ import { mapState, mapActions } from 'pinia'
                 this.stage--
             },
             all_phys_client_apllication(){
-                axios.get('http://127.0.0.1:5000/admin_panel/api/v1.0/applications/all_phys_client_apllication')
+                axios.get('http://127.0.0.1:5000/admin_panel/api/v1.0/clients/phys_clients')
                 .then (response => (this.phys_clients = response.data ))
             },
             all_entity_client_apllication(){
-                axios.get('http://127.0.0.1:5000/admin_panel/api/v1.0/applications/all_entity_client_apllication')
+                axios.get('http://127.0.0.1:5000/admin_panel/api/v1.0/clients/entity_clients')
                 .then (response => (this.entity_clients = response.data))
             },
             all_stocks_application(){
-                axios.get('http://127.0.0.1:5000/admin_panel/api/v1.0/applications/all_stocks_apllication')
+                axios.get('http://127.0.0.1:5000/admin_panel/api/v1.0/stocks')
                 .then(response => (this.stocks = response.data))
             },
             get_stock_id(){
-                let array_stock = this.stock_check.split(' ')
-                this.stock_id = array_stock[1]
                 this.get_materials_from_stock(this.stock_id)
             },
             get_materials_from_stock(id){

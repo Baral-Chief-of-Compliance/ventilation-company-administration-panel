@@ -3,6 +3,12 @@
                 <template>
                     <div class="text-h3 py-6 mx-10 text-left">Добавить заявку</div>
 
+                    <v-row class="d-flex justify-center my-5">
+                        <v-card v-show="add_inf" class="pa-6" color="green-accent-1">
+                            Заказа Добавлен 
+                        </v-card>
+                    </v-row>
+
                     <div class="py-6 mx-10 d-flex justify-center">
                         <v-col>
                             <v-row class="ma-10" v-if="stage === 0">
@@ -30,7 +36,7 @@
                                 <v-card
                                     v-show="selected === 'phys'"
                                     v-model="phys_check"
-                                    class="overflow-y-auto"
+                                    class="my-2 pa-6 mx-14 overflow-y-auto"
                                     max-height="600"
 
                                 >
@@ -52,6 +58,8 @@
                                 <v-card
                                     v-show="selected === 'entity'"
                                     v-model="entity_check"
+                                    class="my-2 pa-6 mx-14 overflow-y-auto"
+                                    max-height="600"
 
                                 >
                                     <v-card-text>
@@ -70,14 +78,17 @@
                             </v-row>
                                         
                             <v-row class="ma-10" v-else-if="stage === 1">
-                                <v-radio-group v-model="stock_id">
-                                    <v-radio v-for="st in stocks"
-                                        :label="`Склад по адресу г. ${st.town} ул. ${st.street} д. ${st.house} к. ${st.frame}`" 
-                                        :value="st.id" 
-                                        color="indigo"
-                                    >
-                                    </v-radio>
-                                </v-radio-group>
+                                <v-card   class="my-2 pa-6 mx-14">
+                                    <v-radio-group v-model="stock_id">
+                                        <v-radio v-for="st in stocks"
+                                            :label="`Склад по адресу г. ${st.town} ул. ${st.street} д. ${st.house} к. ${st.frame}`" 
+                                            :value="st.id" 
+                                            color="indigo"
+                                        >
+                                        </v-radio>
+                                    </v-radio-group>
+                                </v-card>
+
                             </v-row>
 
                             <v-row class="ma-10" v-else-if="stage === 2">
@@ -134,19 +145,7 @@
                             </v-row>
 
                             <v-row class="ma-10" v-if="stage === 5">
-                                <v-btn block color="indigo">Добавить заявку</v-btn>
-                            </v-row>
-
-                            <v-row class="ma-10">
-                                {{ phys_check.split(' ')[3] }}
-                                {{ entity_check.split(' ')[5] }}
-                                {{ stock_id }}
-                                {{ date_create }}
-                                {{ date_start_work }}
-                                {{ date_end_work }}
-                                {{  selected_brigade }}
-                                {{ ph_id }}
-                                {{ en_id }}
+                                <v-btn block color="indigo" @click="send_data_about_application(), sendData()">Добавить заявку</v-btn>
                             </v-row>
                         </v-col>
                     </div>
@@ -163,7 +162,6 @@ import { mapState, mapActions } from 'pinia'
     export default{
         data(){
             return{
-                dialog: false,
                 stage: 0,
                 selected: null,
                 phys_clients: [],
@@ -179,6 +177,7 @@ import { mapState, mapActions } from 'pinia'
                 frame: '',
                 ph_id: 0,
                 en_id: 0,
+                add_inf: false,
 
                 stocks_info: [],
                 selected_brigade: 0,
@@ -203,6 +202,8 @@ import { mapState, mapActions } from 'pinia'
             ...mapActions(useCartStore, ['addItem']),
 
             ...mapActions(useCartStore, ['removeItem']),
+
+            ...mapActions(useCartStore, ['sendData']),
 
             enter_stage(){
                 if (this.stage === 1){
@@ -237,11 +238,47 @@ import { mapState, mapActions } from 'pinia'
                 .then(response => (this.brigades_info = response.data))
             },
 
-            // send_data_about_application(){
-            //     axios.post('http://127.0.0.1:5000/admin_panel/api/v1.0/applications/add_application', {
-            //         phone: 
-            //     })
-            // }
+            send_data_about_application(){
+                let cl_id_for_send = 0
+                if (this.selected === 'phys'){
+                    cl_id_for_send = this.phys_check
+                }
+                else if (this.selected === 'entity'){
+                    cl_id_for_send = this.entity_check
+                }
+                axios.post('http://127.0.0.1:5000/admin_panel/api/v1.0/applications/add_application', {
+                    cl_id: cl_id_for_send,
+                    op_id: 1,
+                    br_id: this.selected_brigade,
+                    town: this.town,
+                    street: this.street,
+                    house: this.house,
+                    frame: this.frame,
+                    apartment: 20,
+                    date_create: this.date_create,
+                    date_of_start_work: this.date_start_work,
+                    date_of_end_work: this.date_end_work
+                })
+
+                this.add_inf = true,
+                this.stage = 0,
+                this.selected = null,
+                this.data = [],
+                this.date_create = '',
+                this.date_start_work = '',
+                this.date_end_work = '',
+                this.town = '',
+                this.street = '',
+                this.house = '',
+                this.frame = '',
+                this.ph_id = 0,
+                this.en_id = 0,
+                this.selected_brigade = 0,
+                this.phys_check = '',
+                this.entity_check = '',
+                this.stock_check = '',
+                this.stock_id = ''
+            }
         }
     }
 </script>

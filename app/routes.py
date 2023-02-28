@@ -521,7 +521,7 @@ def all_stocks_apllication():
 @app.route('/admin_panel/api/v1.0/applications/add_application', methods=['POST'])
 def add_application():
     if request.method == 'POST':
-        phone = request.json['phone']
+        cl_id = request.json['cl_id']
         op_id = request.json['op_id']
         br_id = request.json['br_id']
         town = request.json['town']
@@ -539,9 +539,9 @@ def add_application():
         latitude = get_latitude(place)
 
         call_stored_procedure(
-            'add_application',
+            'create_application',
             [
-                phone,
+                cl_id,
                 op_id,
                 br_id,
                 town,
@@ -562,3 +562,12 @@ def add_application():
         return jsonify(f'order {date_create}  is add')
 
 
+@app.route('/admin_panel/api/v1.0/applications/add_materials_in_order', methods=['POST'])
+def add_materials_in_order():
+    if request.method == 'POST':
+        items = request.json['items']
+
+        for key, value in items.items():
+            call_stored_procedure('add_materials_into_app', [key, value], commit=True, fetchall=False)
+
+        return jsonify('materials ara added into an application')

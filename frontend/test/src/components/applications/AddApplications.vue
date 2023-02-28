@@ -145,7 +145,7 @@
                             </v-row>
 
                             <v-row class="ma-10" v-if="stage === 5">
-                                <v-btn block color="indigo" @click="send_data_about_application(), sendData()">Добавить заявку</v-btn>
+                                <v-btn block color="indigo" @click="send_data_about_application()">Добавить заявку</v-btn>
                             </v-row>
                         </v-col>
                     </div>
@@ -259,6 +259,8 @@ import { mapState, mapActions } from 'pinia'
                     date_of_start_work: this.date_start_work,
                     date_of_end_work: this.date_end_work
                 })
+
+                this.sendData()
 
                 this.add_inf = true,
                 this.stage = 0,

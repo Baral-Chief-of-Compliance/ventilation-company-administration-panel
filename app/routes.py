@@ -571,3 +571,45 @@ def add_materials_in_order():
             call_stored_procedure('add_materials_into_app', [key, value], commit=True, fetchall=False)
 
         return jsonify('materials ara added into an application')
+
+
+@app.route('/admin_panel/api/v1.0/applications/show_all_active_application', methods=['GET'])
+def show_all_active_application():
+    if request.method == 'GET':
+
+        json_applications = []
+        applications = call_stored_procedure('show_all_active_application', commit=False, fetchall=True)
+
+        for ap in applications:
+            json_applications.append(
+                {
+                    'id': ap[0],
+                    'date_create': ap[1],
+                    'date_start_work': ap[2],
+                    'date_end_work': ap[3]
+                }
+            )
+        print(json_applications)
+        return jsonify(json_applications)
+
+
+@app.route('/admin_panel/api/v1.0/applications/show_all_close_application', methods=['GET'])
+def show_all_close_application():
+    if request.method == 'GET':
+
+        json_applications = []
+        applications = call_stored_procedure('show_all_close_application', commit=False, fetchall=True)
+
+        for ap in applications:
+            json_applications.append(
+                {
+                    'id': ap[0],
+                    'date_create': ap[1],
+                    'date_start_work': ap[2],
+                    'date_end_work': ap[3],
+                    'date_close': ap[4]
+                }
+            )
+
+        return jsonify(json_applications)
+

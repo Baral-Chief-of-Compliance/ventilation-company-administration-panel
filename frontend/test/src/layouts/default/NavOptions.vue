@@ -99,8 +99,8 @@
       ],
       orders: [
         ['Добавить', 'mdi-plus-outline', '/add_application'],
-        ['Найти', 'mdi-file-outline'],
-        ['Список', 'mdi-update']
+        ['Активные', 'mdi-file-outline', '/all_active_application'],
+        ['Закрытые', 'mdi-update', '/all_close_application']
       ],
     }),
   }

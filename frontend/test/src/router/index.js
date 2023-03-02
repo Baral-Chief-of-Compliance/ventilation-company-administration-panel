@@ -55,6 +55,16 @@ const routes = [
         path: 'add_application',
         name: 'add_application',
         component: () => import('@/components/applications/AddApplications.vue')
+      },
+      {
+        path: 'all_active_application',
+        name: 'all_active_application',
+        component: () => import('@/components/applications/AllActiveApplications.vue')
+      },
+      {
+        path: 'all_close_application',
+        name: 'all_close_application',
+        component: () => import('@/components/applications/AllCloseApplications.vue')
       }
     ]
   },

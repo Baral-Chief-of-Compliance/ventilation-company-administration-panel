@@ -209,6 +209,9 @@ import { mapState, mapActions } from 'pinia'
                 if (this.stage === 1){
                     this.get_stock_id()
                 }
+                else if (this.stage === 1){
+                    this.add_inf = false
+                }
                 this.stage++
             },
             exit_stage(){
@@ -241,10 +244,10 @@ import { mapState, mapActions } from 'pinia'
             send_data_about_application(){
                 let cl_id_for_send = 0
                 if (this.selected === 'phys'){
-                    cl_id_for_send = this.phys_check
+                    cl_id_for_send = this.ph_id
                 }
                 else if (this.selected === 'entity'){
-                    cl_id_for_send = this.entity_check
+                    cl_id_for_send = this.en_id
                 }
                 axios.post('http://127.0.0.1:5000/admin_panel/api/v1.0/applications/add_application', {
                     cl_id: cl_id_for_send,
@@ -258,9 +261,9 @@ import { mapState, mapActions } from 'pinia'
                     date_create: this.date_create,
                     date_of_start_work: this.date_start_work,
                     date_of_end_work: this.date_end_work
+                }).then((response) => {
+                        this.sendData()
                 })
-
-                this.sendData()
 
                 this.add_inf = true,
                 this.stage = 0,

@@ -559,7 +559,7 @@ def add_application():
             fetchall=False
         )
 
-        return jsonify(f'order {date_create}  is add')
+        return jsonify(f'order {date_create}  is add'), 200
 
 
 @app.route('/admin_panel/api/v1.0/applications/add_materials_in_order', methods=['POST'])

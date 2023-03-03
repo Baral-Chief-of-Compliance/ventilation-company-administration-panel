@@ -4,7 +4,7 @@
      <div class="py-6 mx-10 d-flex justify-center">
         <v-col>
             <v-card v-for="app in applications" class="my-2 pa-6 mx-14 d-flex flex-row">
-                <b class="pr-2">Создан: </b>  {{ app.date_create }} <v-spacer></v-spacer> <b class="pr-2">Начало работы:</b> {{ app.date_start_work }} <v-spacer></v-spacer> <b class="pr-2">Конец работы:</b>  {{ app.date_end_work }} <v-spacer></v-spacer> <v-card>{{ app.days_are_left }}</v-card>
+                <b class="pr-2">Создан: </b>  {{ app.date_create }} <v-spacer></v-spacer> <b class="pr-2">Начало работы:</b> {{ app.date_start_work }} <v-spacer></v-spacer> <b class="pr-2">Конец работы:</b>  {{ app.date_end_work }} <v-spacer></v-spacer> <v-card v-show="!app.delay_status" class="pa-1" color="green-accent-1" outline><span class="pr-1">Осталось:</span>{{ app.days_are_left }} <span class="pl-1">дней</span></v-card> <v-card v-show="app.delay_status" class="pa-1" color="red-accent-1" outline><span class="pr-1">Задержка в:</span>{{ app.days_are_left }} <span class="pl-1">дней</span></v-card>
             </v-card>
         </v-col>
      </div>
@@ -44,13 +44,21 @@ import axios from 'axios';
                     var d = new Date()
                     for (let res of response.data){
                         var d_end = new Date(res.date_end_work)
+
+                        if (d_end >= d){
+                            var delay_status = false
+                        }
+                        else {
+                            var delay_status = true
+                        }
                         var difference =  Math.abs(d_end - d) / (1000*60*60*24)
                         this.applications.push({
                             id: res.id,
                             date_create: this.format_date(res.date_create),
                             date_start_work: this.format_date(res.date_start_work),
                             date_end_work: this.format_date(res.date_end_work),
-                            days_are_left: Math.ceil(difference)
+                            days_are_left: Math.ceil(difference),
+                            delay_status: delay_status
                         })
                     }
                 })

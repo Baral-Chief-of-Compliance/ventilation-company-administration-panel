@@ -613,3 +613,52 @@ def show_all_close_application():
 
         return jsonify(json_applications)
 
+
+@app.route('/admin_panel/api/v1.0/applications/<int:id>', methods=['GET'])
+def info_application(id):
+    if request.method == 'GET':
+        json_materials = []
+
+        inf = call_stored_procedure('info_application', [id], commit=False, fetchall=False)
+        materials = call_stored_procedure('get_materilas_from_application', [id], commit=False, fetchall=True)
+        inf_stock = call_stored_procedure('get_inf_stock_application', [id], commit=False, fetchall=False)
+
+        for m in materials:
+            json_materials.append(
+                {
+                    'name': m[0],
+                    'quantity': m[1]
+                }
+            )
+
+        return jsonify({
+            'date_create': inf[0],
+            'date_start_work': inf[1],
+            'date_end_work': inf[2],
+            'date_close': inf[3],
+            'days_of_delay': inf[4],
+            'town': inf[5],
+            'street': inf[6],
+            'house': inf[7],
+            'frame': inf[8],
+            'apartment': inf[9],
+            'longitude': inf[10],
+            'latitude': inf[11],
+            'br_name': inf[12],
+            'surname': inf[13],
+            'name': inf[14],
+            'patronymic': inf[15],
+            'phone': inf[16],
+            'materials': json_materials,
+            'stock_inf': {
+                'id': inf_stock[0],
+                'town': inf_stock[1],
+                'street': inf_stock[2],
+                'house': inf_stock[3],
+                'frame': inf_stock[4],
+                'apartment': inf_stock[5],
+                'longitude': inf_stock[6],
+                'latitude': inf_stock[7]
+            }
+        })
+

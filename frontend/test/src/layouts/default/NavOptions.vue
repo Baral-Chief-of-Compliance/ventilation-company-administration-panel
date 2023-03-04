@@ -91,7 +91,7 @@
       clients:[
         ['Добавить', 'mdi-account-plus', '/add_client'],
         ['Найти', 'mdi-account-search'],
-        ['Список', 'mdi-account-multiple']
+        ['Список', 'mdi-account-multiple', '/clients']
       ],
       stocks:[
         ['Список', 'mdi-garage', '/stocks'],

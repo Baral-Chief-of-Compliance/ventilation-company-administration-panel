@@ -70,6 +70,11 @@ const routes = [
         path: 'applications/:id',
         name: 'application_inf',
         component: () => import('@/components/applications/ApplicationInfo.vue')
+      },
+      {
+        path: 'clients',
+        name: 'clients',
+        component: () => import('@/components/clients/Clients.vue')
       }
     ]
   },

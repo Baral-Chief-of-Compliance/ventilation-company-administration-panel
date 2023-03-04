@@ -589,7 +589,6 @@ def show_all_active_application():
                     'date_end_work': ap[3]
                 }
             )
-        print(json_applications)
         return jsonify(json_applications)
 
 
@@ -614,7 +613,7 @@ def show_all_close_application():
         return jsonify(json_applications)
 
 
-@app.route('/admin_panel/api/v1.0/applications/<int:id>', methods=['GET'])
+@app.route('/admin_panel/api/v1.0/applications/<int:id>', methods=['GET', 'PATCH'])
 def info_application(id):
     if request.method == 'GET':
         json_materials = []
@@ -661,4 +660,16 @@ def info_application(id):
                 'latitude': inf_stock[7]
             }
         })
+
+    elif request.method == 'PATCH':
+        date_close = request.json['date_close']
+        days_of_delay = request.json['days_of_delay']
+
+        call_stored_procedure('close_application', [id, date_close, days_of_delay], commit=True, fetchall=False)
+
+        return jsonify(f'application {id} is closed')
+
+
+
+
 

@@ -15,6 +15,7 @@
                     <v-card  class="my-2 pa-6 mx-14 d-flex flex-row"
                         v-bind="props"
                         :color="isHovering ? 'indigo': undefined"
+                        :to="{ name: 'phys_client_info', params: {id: phys.id}}"
                     >
                         <b class="pr-2">Фамилия: </b>  {{ phys.surname }} 
                         <v-spacer></v-spacer> 

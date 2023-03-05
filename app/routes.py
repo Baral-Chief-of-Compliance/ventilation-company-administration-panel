@@ -246,7 +246,18 @@ def add_phys_client():
 @app.route('/admin_panel/api/v1.0/clients/phys_clients/<int:id>', methods=['GET', 'DELETE'])
 def phys_clients(id):
     if request.method == 'GET':
+        json_applications = []
         inf = call_stored_procedure('inf_about_phys_client', [id], commit=False, fetchall=False)
+        applications = call_stored_procedure('show_all_apllication_client', [id], commit=False, fetchall=True)
+
+        for app in applications:
+            json_applications.append({
+                'id': app[0],
+                'date_create': app[1],
+                'date_start_work': app[2],
+                'date_end_work': app[3],
+                'date_close': app[4]
+            })
         return jsonify(
                         {
                             'surname': inf[0],
@@ -259,7 +270,8 @@ def phys_clients(id):
                             'frame': inf[7],
                             'apartment': inf[8],
                             'longitude': inf[9],
-                            'latitude': inf[10]
+                            'latitude': inf[10],
+                            'applications': json_applications
 
                         }
         )

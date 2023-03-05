@@ -75,6 +75,16 @@ const routes = [
         path: 'clients',
         name: 'clients',
         component: () => import('@/components/clients/Clients.vue')
+      },
+      {
+        path: 'clients/phys_clients/:id',
+        name: 'phys_client_info',
+        component: () => import('@/components/clients/PhysClient.vue')
+      },
+      {
+        path: 'clients/entity_clients/:id',
+        name: 'entity_client_info',
+        component: () => import('@/components/clients/EntityClient.vue')
       }
     ]
   },

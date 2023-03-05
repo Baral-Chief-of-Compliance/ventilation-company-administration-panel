@@ -10,7 +10,26 @@
                     :color="isHovering ? 'indigo': undefined"
                     :to="{ name: 'application_inf', params: {id: app.id}}"
                 >
-                    <b class="pr-2">Создан: </b>  {{ app.date_create }} <v-spacer></v-spacer> <b class="pr-2">Начало работы:</b> {{ app.date_start_work }} <v-spacer></v-spacer> <b class="pr-2">Конец работы:</b>  {{ app.date_end_work }} <v-spacer></v-spacer> <v-card v-show="!app.delay_status" class="pa-1" color="green-accent-1" outline><span class="pr-1">Осталось:</span>{{ app.days_are_left }} <span class="pl-1">дней</span></v-card> <v-card v-show="app.delay_status" class="pa-1" color="red-accent-1" outline><span class="pr-1">Задержка в:</span>{{ app.days_are_left }} <span class="pl-1">дней</span></v-card>
+                    <b class="pr-2">Создан: </b>  
+                    {{ app.date_create }} 
+                    <v-spacer></v-spacer> 
+                    
+                    <b class="pr-2">Начало работы:</b> 
+                    {{ app.date_start_work }} 
+                    <v-spacer></v-spacer> 
+                    
+                    <b class="pr-2">Конец работы:</b> 
+                     {{ app.date_end_work }} 
+                     <v-spacer></v-spacer> 
+                     
+                     <v-card 
+                        v-show="!app.delay_status" 
+                        class="pa-1" color="green-accent-1" 
+                        outline><span class="pr-1"
+                    >
+                        Осталось:</span>{{ app.days_are_left }} 
+                        <span class="pl-1">дней</span>
+                    </v-card> <v-card v-show="app.delay_status" class="pa-1" color="red-accent-1" outline><span class="pr-1">Задержка в:</span>{{ app.days_are_left }} <span class="pl-1">дней</span></v-card>
                 </v-card>
             </v-hover>
 

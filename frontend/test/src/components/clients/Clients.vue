@@ -46,6 +46,7 @@
                     <v-card  class="my-2 pa-6 mx-14 d-flex flex-row"
                         v-bind="props"
                         :color="isHovering ? 'indigo': undefined"
+                        :to="{name: 'entity_client_info', params: {id: ent.id}}"
                     >
                         <b class="pr-2">Фамилия: </b>  {{ ent.surname }} 
                         <v-spacer></v-spacer> 

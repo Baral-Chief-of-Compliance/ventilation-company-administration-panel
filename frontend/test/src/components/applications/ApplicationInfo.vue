@@ -79,7 +79,9 @@ import MapApllication from '../Map/MapApllication.vue';
 export default{
     data(){
         return{
-            inf: { stock_inf: {}, date_close_status: true}
+            inf: { stock_inf: {}},
+            date_close_for_btn: '',
+            date_close_status: true
         }
     },
 
@@ -94,7 +96,7 @@ export default{
     methods: {
         format_date(date){
                 if (date === null){
-                    this.inf.date_close_status = false
+                    this.date_close_status = false
                     return date
                 }
                 else{
@@ -113,11 +115,26 @@ export default{
 
             },
 
+        format_date_for_send(date){
+                var d = new Date(date)
+
+                var dd = d.getDate()
+                if (dd < 10) dd = '0' + dd
+
+                var mm = d.getMonth() + 1
+                if (mm < 10) mm = '0' + mm
+
+                var yy = d.getFullYear()
+
+                return yy + '-' + mm + '-' + dd
+        },
+
         get_data(){
             axios.get(`http://127.0.0.1:5000/admin_panel/api/v1.0/applications/${this.$route.params.id}`)
             .then(response => {
 
                 response.data.date_create = this.format_date(response.data.date_create)
+                this.date_close_for_btn = response.data.date_end_work
                 response.data.date_end_work = this.format_date(response.data.date_end_work)
                 response.data.date_start_work = this.format_date(response.data.date_start_work)
                 response.data.date_close = this.format_date(response.data.date_close)
@@ -130,18 +147,20 @@ export default{
 
         close_application(){
             let date_close = new Date()
-            let date_end_work = new Date(this.inf.date_end_work)
+            this.date_close_for_btn = new Date(this.date_close_for_btn)
+            
 
-            if (date_end_work >= date_close){
+            if (this.date_close_for_btn >= date_close){
                 var days_of_delay = 0
             }
             else{
-                var days_of_delay = Math.abs(date_close - date_end_work) / (1000*60*60*24)
+                var days_of_delay = Math.abs(date_close - this.date_close_for_btn) / (1000*60*60*24)
             }
+
 
             axios.patch(`http://127.0.0.1:5000/admin_panel/api/v1.0/applications/${this.$route.params.id}`,
             {
-                date_close: date_close,
+                date_close: this.format_date_for_send(date_close),
                 days_of_delay: days_of_delay
             }
             )
